@@ -5,8 +5,7 @@
 
 const int QUANTITY_Y = 5;
 const int QUANTITY_X = 3;
-
-double* GaussMethod(double** Matrix);
+double* iter(double** a,  int n);
 void AproksimFunction();
 class Matrix
 {
@@ -140,31 +139,58 @@ void Matrix::Show()
 		std::cout << "\n";
 	}
 }
-double* GaussMethod(double** Matrix)
+
+double* iter(double** a, int n)
 {
-	double* result = new double[3];
-	for (unsigned short j(1); j < 3; j++)
+	double* y= new double [3];
+	double* res = new double[n];
+	int i, j;
+
+	for (i = 0; i < n; i++)
 	{
-		double subdiv = Matrix[j][0] / Matrix[0][0];
-		for (unsigned short i(0); i < 4; i++)
-		{
-			Matrix[j][i] = Matrix[j][i] - (Matrix[0][i] * subdiv);
-		}
-	}
-	for (unsigned short j(2); j < 3; j++)
-	{
-		double subdiv = Matrix[j][1] / Matrix[1][1];
-		for (unsigned short i(1); i < 4; i++)
-		{
-			Matrix[j][i] = Matrix[j][i] - (Matrix[1][i] * subdiv);
-		}
+		y[i]=a[i][3];
 	}
 
-	result[2] = Matrix[2][3] / Matrix[2][2];
-	result[1] = (Matrix[1][3] - Matrix[1][2] * result[2]) / Matrix[1][1];
-	result[0] = (Matrix[0][3] - Matrix[0][1] * result[1] - Matrix[0][2] * result[2]) / Matrix[0][0];
-	return result;
+	for (i = 0; i < n; i++)
+	{
+		res[i] = y[i] / a[i][i];
+	}
+
+
+	double eps = 0.0001;
+	double* Xn = new double[n];
+
+	do {
+		for (i = 0; i < 3; i++) {
+			Xn[i] = y[i] / a[i][i];
+			for (j = 0; j < n; j++) {
+				if (i == j)
+					continue;
+				else {
+					Xn[i] -= a[i][j] / a[i][i] * res[j];
+				}
+			}
+		}
+
+		bool flag = true;
+		for (i = 0; i < n - 1; i++) {
+			if (abs(Xn[i] - res[i]) > eps) {
+				flag = false;
+				break;
+			}
+		}
+
+		for (i = 0; i < n; i++) {
+			res[i] = Xn[i];
+		}
+
+		if (flag)
+			break;
+	} while (1);
+
+	return res;
 }
+
 void AproksimFunction()
 {
 	double Y[QUANTITY_Y] = { 0.0f, 0.8f, 0.7f, 0.4f, 0.1f };
@@ -180,7 +206,7 @@ void AproksimFunction()
 		}
 		std::cout << std::endl;
 	}
-	double* answers = GaussMethod(mat_object.mat);
+	double* answers = iter(mat_object.mat,3);
 	double f[QUANTITY_Y] = {};
 	double sigma[QUANTITY_Y] = {};
 	double J = 0;
@@ -191,16 +217,7 @@ void AproksimFunction()
 		J += pow(sigma[i], 2);
 	}
 
-	//Отсюда идет вывод данных
-	std::cout << "\nМатрица после обработки\n";
-	for (unsigned short i(0); i < 3; i++)
-	{
-		for (unsigned short j(0); j < 4; j++)
-		{
-			std::cout << mat_object.mat[i][j] << " ";
-		}
-		std::cout << std::endl;
-	}
+
 	std::cout << "\nX,Y и Z в результате выполнения метода Гаусса\n";
 	for (unsigned short i(0); i < 3; i++)
 	{
