@@ -6,19 +6,35 @@ const double eps = 0.001;
 const int N = 5;
 const int ROWS = 3;
 
-class PointXY
+class BasisXY
 {
 private:
-
 	double X;
 	double Y;
-	double Fi;
+
 public:
-	PointXY(double X, double Y)
+
+	double f1(double x)
+	{
+		return 1;
+	}
+
+	double f2(double x)
+	{
+		return x;
+	}
+
+	double f3(double x)
+	{
+		return ((3 * (x * x)) - 1);
+	}
+
+	
+	BasisXY(double X, double Y)
 	{
 		this->X = X;
 		this->Y = Y;
-		this->Fi = Fi;
+
 	}
 
 	double GetX()
@@ -43,34 +59,41 @@ public:
 		this->Y = Y;
 
 	}
-	double CreatFi(double X[N], double Y[N], double Fi[ROWS][N])
-	{
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 5; j++)
-			{
-				if (i == 0)
-				{
-					Fi[i][j] = 1;
-				}
-
-				if (i == 1)
-				{
-					Fi[i][j] = X[j];
-				}
-
-				if (i == 2)
-				{
-					Fi[i][j] = ((3 * (X[j] * X[j])) - 1);
-				}
-
-			}
-
-		}
-		return Fi[ROWS][N];
-	}
+	
+	
 };
 
+//class creatFi
+//{
+//public:
+//
+//	BasisXY* CreatFi(BasisXY* XiYi, double Y[N], double Fi[ROWS][N])
+//	{
+//		for (int i = 0; i < 3; i++)
+//		{
+//			for (int j = 0; j < 5; j++)
+//			{
+//				if (i == 0)
+//				{
+//					Fi[i][j] = 1;
+//				}
+//
+//				if (i == 1)
+//				{
+//					Fi[i][j] = XiYi.X[j];
+//				}
+//
+//				if (i == 2)
+//				{
+//					Fi[i][j] = ((3 * (X[j] * X[j])) - 1);
+//				}
+//
+//			}
+//
+//		}
+//		return Fi[ROWS][N];
+//
+//};
 
 
 double* iter(double a[3][3], double y[3], int n);
@@ -81,11 +104,11 @@ int main()
 	setlocale(LC_ALL, "rus");
 	BasisXY* XiYi = new BasisXY[N]
 	{
-		{-1.0, 0.0, },
-		{-0.3, 0.8, },
-		{ 0.4, 0.7, },
-		{ 0.6, 0.4, },
-		{ 1.0, 0.1, }
+		{-1.0, 0.0, ) },
+		{-0.3, 0.8 },
+		{ 0.4, 0.7 },
+		{ 0.6, 0.4},
+		{ 1.0, 0.1 }
 	};
 
 	
