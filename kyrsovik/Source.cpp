@@ -5,7 +5,9 @@
 
 const int QUANTITY_Y = 5;
 const int QUANTITY_X = 3;
-double* iter(double** a,  int n);
+//double* iter(double** a,  int n);
+double* multi(double** a);
+double* inversion(double** a, int n);
 void AproksimFunction();
 class Matrix
 {
@@ -140,59 +142,189 @@ void Matrix::Show()
 	}
 }
 
-double* iter(double** a, int n)
+//double* iter(double** a, int n)
+//{
+//	double* y= new double [3];
+//	double* res = new double[n];
+//	int i, j;
+//
+//	for (i = 0; i < n; i++)
+//	{
+//		y[i]=a[i][3];
+//	}
+//
+//	for (i = 0; i < n; i++)
+//	{
+//		res[i] = y[i] / a[i][i];
+//	}
+//
+//
+//	double eps = 0.0001;
+//	double* Xn = new double[n];
+//
+//	do {
+//		for (i = 0; i < 3; i++) {
+//			Xn[i] = y[i] / a[i][i];
+//			for (j = 0; j < n; j++) {
+//				if (i == j)
+//					continue;
+//				else {
+//					Xn[i] -= a[i][j] / a[i][i] * res[j];
+//				}
+//			}
+//		}
+//
+//		bool flag = true;
+//		for (i = 0; i < n - 1; i++) {
+//			if (abs(Xn[i] - res[i]) > eps) {
+//				flag = false;
+//				break;
+//			}
+//		}
+//
+//		for (i = 0; i < n; i++) {
+//			res[i] = Xn[i];
+//		}
+//
+//		if (flag)
+//			break;
+//	} while (1);
+//
+//	return res;
+//}
+double* inversion(double** a, int n)
 {
-	double* y= new double [3];
-	double* res = new double[n];
-	int i, j;
 
-	for (i = 0; i < n; i++)
+	double temp;
+	double** res = new double *[n];
+	for (unsigned short step(0); step < n; step++)
 	{
-		y[i]=a[i][3];
+		res[step] = new double[n];
 	}
 
-	for (i = 0; i < n; i++)
+	for (int k = 0; k < n; k++)
 	{
-		res[i] = y[i] / a[i][i];
+		temp = a[k][k];
+
+		for (int j = 0; j < n; j++)
+		{
+			a[k][j] /= temp;
+			res[k][j] /= temp;
+		}
+
+		for (int i = k + 1; i < n; i++)
+		{
+			temp = a[i][k];
+
+			for (int j = 0; j < n; j++)
+			{
+				a[i][j] -= a[k][j] * temp;
+				res[i][j] -= res[k][j] * temp;
+			}
+		}
 	}
 
+	for (int k = n - 1; k > 0; k--)
+	{
+		for (int i = k - 1; i >= 0; i--)
+		{
+			temp = a[i][k];
 
-	double eps = 0.0001;
-	double* Xn = new double[n];
-
-	do {
-		for (i = 0; i < 3; i++) {
-			Xn[i] = y[i] / a[i][i];
-			for (j = 0; j < n; j++) {
-				if (i == j)
-					continue;
-				else {
-					Xn[i] -= a[i][j] / a[i][i] * res[j];
-				}
+			for (int j = 0; j < n; j++)
+			{
+				a[i][j] -= a[k][j] * temp;
+				res[i][j] -= res[k][j] * temp;
 			}
 		}
+	}
+	return *res;
+}
 
-		bool flag = true;
-		for (i = 0; i < n - 1; i++) {
-			if (abs(Xn[i] - res[i]) > eps) {
-				flag = false;
-				break;
-			}
+double* multi(double** a)
+{
+	double* y = new double[3];
+	double* res = new double[3];
+	
+		int i, j;
+	
+		for (i = 0; i < 3; i++)
+		{
+			std::cout<<a[0][0];
 		}
-
-		for (i = 0; i < n; i++) {
-			res[i] = Xn[i];
-		}
-
-		if (flag)
-			break;
-	} while (1);
-
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+			res[i] += a[i][j] * y[j];
 	return res;
 }
 
+
+//double* iter(double** a, int n)
+//{
+//	double** mat = new double* [n];
+//	double** mat1 = new double* [n];
+//	double** mat2 = new double* [n];
+//	double** mat3 = new double* [n];
+//	for (unsigned short step(0); step < n; step++)
+//	{
+//		mat[step] = new double[n];
+//	}
+//	double* y = new double[3];
+//	double* res = new double[n];
+//	int i, j;
+//	for (i = 0; i < n; i++)
+//	{
+//		for (j = 0; j < n; j++)
+//		{
+//			mat[i][j] = a[j][i];
+//		}
+//	}
+//
+//	for (i = 0; i < n; i++)
+//	{
+//		for (j = 0; j < n; j++)
+//		{
+//			mat1[i][j] = 0;
+//			for (int k = 0; k < n; k++)
+//			{
+//				mat1[i][j] += a[i][k] * mat[k][i];
+//				std::cout << mat1[i][j];
+//
+//			}
+//
+//		}
+//	}
+//
+//	for (i = 0; i < n; i++)
+//	{
+//		for (j = 0; j < n; j++)
+//		{
+//			mat2[i][j] = 0;
+//			for (int k = 0; k < n; k++)
+//			{
+//				mat2[i][j] += mat[i][k] * mat[k][i];
+//				std::cout << mat[i][j];
+//			}
+//
+//		}
+//	}
+//	
+//
+//		
+//
+//	double* Xn = new double[n];
+//
+//	
+//	return res;
+//}
+
 void AproksimFunction()
 {
+	double E[3][3] =
+	{
+		1.0, 0.0, 0.0,
+		0.0, 1.0, 0.0,
+		0.0, 0.0, 1.0
+	};
 	double Y[QUANTITY_Y] = { 0.0f, 0.8f, 0.7f, 0.4f, 0.1f };
 	Matrix mat_object;
 	BazF basic_f({ -1.0f,-0.3f,0.4f,0.6f,1.0f });
@@ -206,7 +338,9 @@ void AproksimFunction()
 		}
 		std::cout << std::endl;
 	}
-	double* answers = iter(mat_object.mat,3);
+	double** mat = new double* [3];
+	*mat = inversion(mat_object.mat, 3);
+	double* answers = multi(mat_object.mat);
 	double f[QUANTITY_Y] = {};
 	double sigma[QUANTITY_Y] = {};
 	double J = 0;
